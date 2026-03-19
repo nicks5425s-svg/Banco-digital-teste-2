@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Banco Digital</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+        h2 { color: #1a73e8; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #1557b0; }
+        #menu, #operacoes { display: none; }
+        .status { margin-top: 15px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Bank Sim</h2>
+    
+    <div id="login-box">
+        <input type="text" id="user" placeholder="Usuário">
+        <input type="password" id="pass" placeholder="Senha">
+        <button onclick="logar()">Entrar</button>
+    </div>
+
+    <div id="menu">
+        <p class="status">Saldo: R$ <span id="saldo-txt">1000.00</span></p>
+        <button onclick="mostrarOperacao('deposito')">Depositar</button><br><br>
+        <button onclick="mostrarOperacao('saque')">Sacar</button><br><br>
+        <button onclick="mostrarOperacao('rendimento')">Simular Rendimento</button><br><br>
+        <button style="background: #d93025;" onclick="sair()">Sair</button>
+    </div>
+
+    <div id="operacoes">
+        <p id="label-op"></p>
+        <input type="number" id="valor-op" placeholder="Valor ou Meses">
+        <button onclick="executarAcao()">Confirmar</button>
+        <button style="background: #999; margin-top: 5px;" onclick="voltar()">Voltar</button>
+    </div>
+
+    <p id="msg" style="color: red; font-size: 12px; text-align: center;"></p>
+</div>
+
+<script>
+    // Variáveis que eram do seu Portugol
+    let saldo = 1000.00;
+    const taxa = 0.005;
+    let acaoAtual = "";
+
+    function logar() {
+        const u = document.getElementById("user").value;
+        const s = document.getElementById("pass").value;
+
+        if (u === "admin" && s === "1902") {
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("menu").style.display = "block";
+            document.getElementById("msg").innerText = "";
+        } else {
+            document.getElementById("msg").innerText = "Login ou senha incorretos!";
+        }
+    }
+
+    function mostrarOperacao(tipo) {
+        acaoAtual = tipo;
+        document.getElementById("menu").style.display = "none";
+        document.getElementById("operacoes").style.display = "block";
+        document.getElementById("label-op").innerText = tipo.toUpperCase();
+    }
+
+    function executarAcao() {
+        let val = parseFloat(document.getElementById("valor-op").value);
+        
+        if (acaoAtual === "deposito") {
+            if (val > 0) saldo += val;
+        } else if (acaoAtual === "saque") {
+            if (val > 0 && val <= saldo) saldo -= val;
+            else alert("Saldo insuficiente ou valor inválido!");
+        } else if (acaoAtual === "rendimento") {
+            let rendido = (taxa * val) * saldo;
+            alert("Renderá: R$ " + rendido.toFixed(2));
+        }
+
+        document.getElementById("saldo-txt").innerText = saldo.toFixed(2);
+        voltar();
+    }
+
+    function voltar() {
+        document.getElementById("operacoes").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+        document.getElementById("valor-op").value = "";
+    }
+
+    function sair() {
+        location.reload(); // Recarrega a página para "deslogar"
+    }
+</script>
+
+</body>
+</html>
