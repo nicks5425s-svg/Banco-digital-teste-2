@@ -2,16 +2,150 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Banco Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sim - Seu Banco Digital</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f0f2f5; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
-        h2 { color: #1a73e8; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #1557b0; }
-        #menu, #operacoes { display: none; }
-        .status { margin-top: 15px; font-weight: bold; color: #333; }
+        /* Cores Globais - Estilo "Roxo Digital" */
+        :root {
+            --primary-color: #8A05BE; /* Roxo Principal */
+            --secondary-color: #F5F5F5; /* Fundo Claro */
+            --accent-color: #20C997; /* Verde para Sucesso */
+            --text-color: #333;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Configuração do Corpo da Página */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            background-color: var(--secondary-color); 
+            color: var(--text-color);
+        }
+
+        /* O "Card" Principal */
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: var(--card-shadow); 
+            width: 350px; 
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Título Principal */
+        h2 { 
+            color: var(--primary-color); 
+            margin-top: 0; 
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* Campos de Entrada (Input) */
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            margin: 10px 0; 
+            border: 2px solid #eee; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Botões */
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 15px;
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        
+        button:hover { 
+            background-color: #70049e; 
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Botões Secundários (Voltar/Sair) */
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .btn-danger {
+            background-color: #d93025;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b3241c;
+        }
+
+        /* Áreas de Conteúdo (Escondidas inicialmente) */
+        #menu, #operacoes { 
+            display: none; 
+        }
+
+        /* Estilo do Saldo */
+        .status-container {
+            background-color: #f8f0fc;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .status-label {
+            font-size: 14px;
+            color: #777;
+            margin: 0;
+        }
+        
+        .status-amount { 
+            font-size: 28px; 
+            font-weight: 700; 
+            color: var(--primary-color); 
+            margin: 5px 0 0 0;
+        }
+
+        /* Mensagens de Erro */
+        #msg { 
+            color: #d93025; 
+            font-size: 14px; 
+            margin-top: 15px; 
+            min-height: 1em;
+        }
+        
+        /* Label da Operação */
+        #label-op {
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -22,29 +156,33 @@
     <div id="login-box">
         <input type="text" id="user" placeholder="Usuário">
         <input type="password" id="pass" placeholder="Senha">
-        <button onclick="logar()">Entrar</button>
+        <button onclick="logar()">Entrar na minha conta</button>
     </div>
 
     <div id="menu">
-        <p class="status">Saldo: R$ <span id="saldo-txt">1000.00</span></p>
-        <button onclick="mostrarOperacao('deposito')">Depositar</button><br><br>
-        <button onclick="mostrarOperacao('saque')">Sacar</button><br><br>
-        <button onclick="mostrarOperacao('rendimento')">Simular Rendimento</button><br><br>
-        <button style="background: #d93025;" onclick="sair()">Sair</button>
+        <div class="status-container">
+            <p class="status-label">Seu saldo disponível</p>
+            <p class="status-amount">R$ <span id="saldo-txt">1000.00</span></p>
+        </div>
+        
+        <button onclick="mostrarOperacao('deposito')">Depositar</button>
+        <button onclick="mostrarOperacao('saque')">Sacar dinheiro</button>
+        <button onclick="mostrarOperacao('rendimento')">Simular rendimento</button>
+        <button class="btn-danger" onclick="sair()">Sair da conta</button>
     </div>
 
     <div id="operacoes">
         <p id="label-op"></p>
-        <input type="number" id="valor-op" placeholder="Valor ou Meses">
-        <button onclick="executarAcao()">Confirmar</button>
-        <button style="background: #999; margin-top: 5px;" onclick="voltar()">Voltar</button>
+        <input type="number" id="valor-op" placeholder="Digite o valor ou meses">
+        <button onclick="executarAcao()">Confirmar operação</button>
+        <button class="btn-secondary" onclick="voltar()">Voltar para o início</button>
     </div>
 
-    <p id="msg" style="color: red; font-size: 12px; text-align: center;"></p>
+    <p id="msg"></p>
 </div>
 
 <script>
-    // Variáveis que eram do seu Portugol
+    // Lógica permanece a mesma do seu Portugol/JS original
     let saldo = 1000.00;
     const taxa = 0.005;
     let acaoAtual = "";
@@ -52,50 +190,7 @@
     function logar() {
         const u = document.getElementById("user").value;
         const s = document.getElementById("pass").value;
+        const msg = document.getElementById("msg");
 
         if (u === "admin" && s === "1902") {
-            document.getElementById("login-box").style.display = "none";
-            document.getElementById("menu").style.display = "block";
-            document.getElementById("msg").innerText = "";
-        } else {
-            document.getElementById("msg").innerText = "Login ou senha incorretos!";
-        }
-    }
-
-    function mostrarOperacao(tipo) {
-        acaoAtual = tipo;
-        document.getElementById("menu").style.display = "none";
-        document.getElementById("operacoes").style.display = "block";
-        document.getElementById("label-op").innerText = tipo.toUpperCase();
-    }
-
-    function executarAcao() {
-        let val = parseFloat(document.getElementById("valor-op").value);
-        
-        if (acaoAtual === "deposito") {
-            if (val > 0) saldo += val;
-        } else if (acaoAtual === "saque") {
-            if (val > 0 && val <= saldo) saldo -= val;
-            else alert("Saldo insuficiente ou valor inválido!");
-        } else if (acaoAtual === "rendimento") {
-            let rendido = (taxa * val) * saldo;
-            alert("Renderá: R$ " + rendido.toFixed(2));
-        }
-
-        document.getElementById("saldo-txt").innerText = saldo.toFixed(2);
-        voltar();
-    }
-
-    function voltar() {
-        document.getElementById("operacoes").style.display = "none";
-        document.getElementById("menu").style.display = "block";
-        document.getElementById("valor-op").value = "";
-    }
-
-    function sair() {
-        location.reload(); // Recarrega a página para "deslogar"
-    }
-</script>
-
-</body>
-</html>
+            document.getElementById("login
