@@ -159,11 +159,14 @@
         <button onclick="logar()">Entrar na minha conta</button>
     </div>
 
-    <div id="menu">
-        <div class="status-container">
-            <p class="status-label">Seu saldo disponível</p>
-            <p class="status-amount">R$ <span id="saldo-txt">1000.00</span></p>
-        </div>
+    <div class="status-container" style="position: relative;">
+    <p class="status-label">Seu saldo disponível</p>
+    <p class="status-amount" id="saldo-display">R$ <span id="saldo-txt">1000.00</span></p>
+    
+    <button id="btn-olho" onclick="alternarSaldo()" style="width: auto; background: none; color: #8A05BE; position: absolute; top: 10px; right: 15px; margin: 0; padding: 5px; font-size: 20px;">
+        👁️
+        </button>
+    </div>
         
         <button onclick="mostrarOperacao('deposito')">Depositar</button>
         <button onclick="mostrarOperacao('saque')">Sacar dinheiro</button>
@@ -250,6 +253,26 @@ function logar() {
             location.reload(); 
         }
     }
+    let saldoVisivel = true;
+
+function alternarSaldo() {
+    const saldoTxt = document.getElementById("saldo-txt");
+    const btnOlho = document.getElementById("btn-olho");
+    
+    if (saldoVisivel) {
+        // Guarda o valor real mas mostra asteriscos
+        saldoTxt.setAttribute("data-valor", saldoTxt.innerText);
+        saldoTxt.innerText = "****";
+        btnOlho.innerText = "🙈"; // Ícone de escondido
+        saldoVisivel = false;
+    } else {
+        // Recupera o valor e mostra novamente
+        saldoTxt.innerText = saldo.toFixed(2);
+        btnOlho.innerText = "👁️"; // Ícone de visível
+        saldoVisivel = true;
+    }
+}
+    
 </script>
 
 </body>
