@@ -187,21 +187,20 @@
     const taxa = 0.005;
     let acaoAtual = "";
 
-    function logar() {
-        const u = document.getElementById("user").value;
-        const s = document.getElementById("pass").value;
-        const msg = document.getElementById("msg");
+function logar() {
+    const u = document.getElementById("user").value;
+    const s = document.getElementById("pass").value;
+    const msg = document.getElementById("msg");
 
-        if (u === "admin" && s === "1902") {
-            document.getElementById("login-box").style.display = "none";
-            document.getElementById("menu").style.display = "block";
-            msg.innerText = "";
-            msg.style.color = var(--accent-color); // Verde para sucesso
-        } else {
-            msg.innerText = "Ops! Usuário ou senha incorretos.";
-            msg.style.color = "#d93025";
-        }
+    if (u === "admin" && s === "1902") {
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+        msg.innerText = "";
+    } else {
+        msg.innerText = "Ops! Usuário ou senha incorretos.";
+        msg.style.color = "#d93025"; // Cor vermelha para erro
     }
+}
 
     function mostrarOperacao(tipo) {
         acaoAtual = tipo;
