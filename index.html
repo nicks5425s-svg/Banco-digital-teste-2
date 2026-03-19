@@ -193,4 +193,65 @@
         const msg = document.getElementById("msg");
 
         if (u === "admin" && s === "1902") {
-            document.getElementById("login
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("menu").style.display = "block";
+            msg.innerText = "";
+            msg.style.color = var(--accent-color); // Verde para sucesso
+        } else {
+            msg.innerText = "Ops! Usuário ou senha incorretos.";
+            msg.style.color = "#d93025";
+        }
+    }
+
+    function mostrarOperacao(tipo) {
+        acaoAtual = tipo;
+        document.getElementById("menu").style.display = "none";
+        document.getElementById("operacoes").style.display = "block";
+        document.getElementById("label-op").innerText = tipo === 'rendimento' ? 'Simulação de Rendimento' : tipo;
+    }
+
+    function executarAcao() {
+        let val = parseFloat(document.getElementById("valor-op").value);
+        
+        if (acaoAtual === "deposito") {
+            if (val > 0) {
+                saldo += val;
+                alert("Depósito de R$ " + val.toFixed(2) + " realizado com sucesso!");
+            } else {
+                alert("Por favor, digite um valor de depósito válido.");
+            }
+        } else if (acaoAtual === "saque") {
+            if (val > 0 && val <= saldo) {
+                saldo -= val;
+                alert("Saque de R$ " + val.toFixed(2) + " realizado com sucesso!");
+            } else {
+                alert("Saldo insuficiente ou valor de saque inválido.");
+            }
+        } else if (acaoAtual === "rendimento") {
+            if (val > 0) {
+                let rendido = (taxa * val) * saldo;
+                alert("Seu saldo de R$ " + saldo.toFixed(2) + " renderá R$ " + rendido.toFixed(2) + " em " + val + " meses.");
+            } else {
+                alert("Por favor, digite um número de meses válido.");
+            }
+        }
+
+        document.getElementById("saldo-txt").innerText = saldo.toFixed(2);
+        voltar();
+    }
+
+    function voltar() {
+        document.getElementById("operacoes").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+        document.getElementById("valor-op").value = "";
+    }
+
+    function sair() {
+        if(confirm("Tem certeza que deseja sair?")) {
+            location.reload(); 
+        }
+    }
+</script>
+
+</body>
+</html>
